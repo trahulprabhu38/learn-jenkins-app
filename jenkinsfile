@@ -10,6 +10,7 @@ pipeline {
                 }
             }
             steps{
+                cleanWs()
                 sh '''
                     ls -la
                     node --version
@@ -18,6 +19,21 @@ pipeline {
                     npm ci
                     npm run build
                     ls -la
+                '''
+            }
+        }
+        stage('test') {
+            steps{
+                script {
+                    def folderPath = '/build' // Replace with your folder path
+                    if (fileExists("${folderPath}/index.html")) {
+                        echo "index.html is present in the folder."
+                    } else {
+                        echo "index.html is NOT present in the folder."
+                    }
+                sh '''
+                    grep index.html
+                    npm test a
                 '''
             }
         }
