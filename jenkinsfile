@@ -30,11 +30,12 @@ pipeline {
                     } else {
                         echo "index.html is NOT present in the folder."
                     }
+                }
                 sh '''
                     grep index.html
                     npm test a
                 '''
-            }
+            
         }
     }
 }
