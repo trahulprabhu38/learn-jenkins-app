@@ -22,22 +22,18 @@ pipeline {
             }
         }
         stage('test') {
-            steps{
-                script {
-                    def folderPath = '/build' // Replace with your folder path
-                    if (fileExists("${folderPath}/index.html")) {
-                        echo "index.html is present in the folder."
-                    } else {
-                        echo "index.html is NOT present in the folder."
-                    }
+            agent {
+                docker{
+                    image 'node:23-alpine'
+                    reuseNode true
                 }
+            }
+            steps{
                 sh '''
-                    grep index.html
+                    test -f build/index.html
                     npm test a
                 '''
-            
+            }
         }
     }
-}
-
 }
