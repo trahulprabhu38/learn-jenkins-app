@@ -95,7 +95,13 @@ pipeline {
                 '''
             }
         }
-       
+       stage('approval'){
+        steps{
+            timeout(time:1,unit:'MINUTES') {
+                input 'Do you want to deploy to production?'
+            }
+        }
+       }
 
         stage('Deploy prod') {
             agent {
