@@ -95,8 +95,22 @@ pipeline {
                 '''
             }
         }
+        stage('approve') {
+            steps {
+                script {
+                    def userInput = input(
+                        id: 'userInput', message: 'Approve deployment to production?', parameters: [
+                            booleanParam(defaultValue: false, description: 'Approve deployment to production?', name: 'approve')
+                        ]
+                    )
+                    if (!userInput.approve) {
+                        error('Production deployment not approved')
+                    }
+                }
+            }
+        }
 
-         stage('Deploy prod') {
+        stage('Deploy prod') {
             agent {
                 docker {
                     image 'node:18-alpine'
